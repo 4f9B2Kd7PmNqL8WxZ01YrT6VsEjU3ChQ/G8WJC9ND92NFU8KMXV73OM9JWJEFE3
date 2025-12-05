@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Run</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-family: 'Nunito', cursive;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            object-fit: cover;
+            border: 4px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .role-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .role-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Nunito', cursive;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: white;
+            min-height: 70px;
+        }
+
+        .role-btn:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        .parent-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .child-btn {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            box-shadow: 0 4px 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        @media (max-width: 480px) {
+            .welcome-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .glass-card {
+                padding: 1.5rem;
+            }
+            
+            .role-btn {
+                padding: 1.2rem 1.5rem;
+                font-size: 1.1rem;
+            }
+            
+            .btn-icon {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        /* Custom icons using CSS */
+        .parent-icon {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            position: relative;
+        }
+
+        .parent-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 16px 0 0 white, 
+                       -8px 8px 0 0 white, 
+                       8px 8px 0 0 white;
+        }
+
+        .child-icon {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            position: relative;
+        }
+
+        .child-icon::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 10px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 14px 0 0 white;
+        }
+
+        .child-icon::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 8px;
+            width: 16px;
+            height: 8px;
+            background: white;
+            border-radius: 8px 8px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.ibb.co/4gjb2QY1/b-A-shiny-golden-game.png" alt="Reward Run Logo" class="avatar">
+        
+        <h1 class="welcome-title">Welcome to Reward Run</h1>
+        
+        <div class="glass-card">
+            <div class="role-buttons">
+                <button class="role-btn parent-btn" onclick="selectRole('parent')">
+                    <span class="parent-icon"></span>
+                    Parent
+                </button>
+                
+                <button class="role-btn child-btn" onclick="selectRole('child')">
+                    <span class="child-icon"></span>
+                    Child
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedRole = localStorage.getItem('userMode');
+            if (savedRole) {
+                redirectToPage(savedRole);
+            }
+        });
+
+        function selectRole(role) {
+
+            localStorage.setItem('userMode', role);
+
+            event.target.style.transform = 'scale(0.95)';
+            event.target.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                redirectToPage(role);
+            }, 150);
+        }
+
+        function redirectToPage(role) {
+            if (role === 'parent') {
+                window.location.href = 'parent.html';
+            } else if (role === 'child') {
+                window.location.href = 'kid.html';
+            }
+        }
+    </script>
+</body>
+</html>
