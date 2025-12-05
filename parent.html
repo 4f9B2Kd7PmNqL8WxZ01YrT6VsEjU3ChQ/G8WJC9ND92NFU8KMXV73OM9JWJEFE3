@@ -49,12 +49,19 @@
             min-height: 100vh;
             padding-bottom: 20px;
             transition: all var(--transition-speed) ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         
         .container {
             max-width: 480px;
             margin: 0 auto;
             padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
         }
         
         .header {
@@ -109,6 +116,7 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px var(--shadow-color);
             transition: all var(--transition-speed) ease;
+            flex-shrink: 0;
         }
         
         .section:hover {
@@ -627,6 +635,233 @@
         .theme-peach {
             background: linear-gradient(135deg, #ff9a9e, #fecfef);
         }
+        
+        /* Confirm Tasks Styles */
+        .confirm-tasks-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+        }
+        
+        .scan-qr-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: all var(--transition-speed) ease;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .scan-qr-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+        
+        .scan-qr-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .no-completed-tasks {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 20px 0;
+        }
+        
+        .completed-task-item {
+            background-color: #f7fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .completed-task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+        
+        .completed-task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .completed-task-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .completed-task-points {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .completed-task-points i {
+            margin-right: 5px;
+        }
+        
+        .completed-task-description {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .completed-task-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn-confirm {
+            background-color: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            flex: 1;
+            margin-right: 10px;
+        }
+        
+        .btn-confirm:hover {
+            background-color: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reject {
+            background-color: #f56565;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            flex: 1;
+        }
+        
+        .btn-reject:hover {
+            background-color: #e53e3e;
+            transform: translateY(-2px);
+        }
+        
+        /* Congratulations Modal */
+        .congrats-modal {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+            text-align: center;
+        }
+        
+        .congrats-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+        
+        .stars-container {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .star {
+            color: #FFD700;
+            display: inline-block;
+            margin: 0 5px;
+            animation: starPop 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .star:nth-child(1) { animation-delay: 0.1s; }
+        .star:nth-child(2) { animation-delay: 0.2s; }
+        .star:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes starPop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .congrats-message {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .btn-close {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .btn-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+        
+        /* WebSocket Status */
+        .ws-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            z-index: 10;
+        }
+        
+        .ws-status.connected {
+            background-color: #48bb78;
+        }
+        
+        .ws-status.disconnected {
+            background-color: #f56565;
+        }
+        
+        .ws-status i {
+            color: white;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -656,6 +891,7 @@
             <div class="tabs">
                 <div class="tab active" id="tasksTab">Tasks</div>
                 <div class="tab" id="awardsTab">Awards</div>
+                <div class="tab" id="confirmTab">Confirm</div>
                 <div class="tab" id="settingsTab">Settings</div>
             </div>
             
@@ -672,6 +908,21 @@
             
             <div id="awardsContent" style="display: none;">
                 <p style="text-align: center; color: var(--text-secondary); padding: 20px 0;">Awards feature coming soon!</p>
+            </div>
+            
+            <div id="confirmContent" style="display: none;">
+                <div class="confirm-tasks-container" id="confirmTasksContainer">
+                    <button class="scan-qr-btn" id="scanQRBtn">
+                        <i class="fas fa-qrcode"></i>
+                        Scan Completed Tasks QR
+                    </button>
+                    <div class="no-completed-tasks" id="noCompletedTasks">
+                        <p>No completed tasks yet. Scan the QR code from your child's device to review and confirm their completed tasks.</p>
+                    </div>
+                    <div id="completedTasksList" class="tasks-list" style="display: none;">
+                        <!-- Completed tasks will be dynamically added here -->
+                    </div>
+                </div>
             </div>
             
             <div id="settingsContent" style="display: none;">
@@ -734,6 +985,11 @@
         <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
         Send Tasks
     </button>
+    
+    <!-- WebSocket Status -->
+    <div class="ws-status disconnected" id="wsStatus">
+        <i class="fas fa-times"></i>
+    </div>
     
     <!-- Send Tasks Overlay -->
     <div class="send-tasks-overlay" id="sendTasksOverlay">
@@ -806,18 +1062,34 @@
         </div>
     </div>
     
-    <!-- Parent Name Modal -->
-    <div class="send-tasks-overlay" id="parentNameModal">
+    <!-- Scan QR Modal -->
+    <div class="send-tasks-overlay" id="scanQRModal">
         <div class="modal">
-            <div class="modal-title">Welcome to Reward Run!</div>
-            <p style="margin-bottom: 15px; color: var(--text-color);">
-                Let's get started by telling us your name.
-            </p>
-            <div class="form-group">
-                <label class="form-label" for="parentNameInput">Your Name</label>
-                <input type="text" class="form-input" id="parentNameInput" placeholder="Enter your name">
+            <button class="close-btn" id="closeScanQRBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Scan Completed Tasks QR</div>
+            <div class="qr-scanner">
+                <i class="fas fa-qrcode"></i>
+                <p>QR scanner will be implemented here</p>
             </div>
-            <button class="btn-primary" id="saveParentNameBtn">Continue</button>
+            <button class="btn-primary" id="simulateScanBtn">Simulate Scan</button>
+        </div>
+    </div>
+    
+    <!-- Congratulations Modal -->
+    <div class="send-tasks-overlay" id="congratsModal">
+        <div class="congrats-modal">
+            <div class="congrats-title">Congratulations!</div>
+            <div class="stars-container" id="starsContainer">
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+            </div>
+            <div class="congrats-message" id="congratsMessage">
+                Your child has completed all tasks successfully!
+            </div>
+            <button class="btn-close" id="closeCongratsBtn">Close</button>
         </div>
     </div>
     
@@ -829,6 +1101,10 @@
             let kids = [];
             let parentName = '';
             let qrCodeInstance = null;
+            let completedTasks = [];
+            let rejectedTasks = [];
+            let wsConnection = null;
+            let wsConnected = false;
             
             // Theme configurations
             const themes = {
@@ -984,6 +1260,49 @@
                 }
             };
             
+            // Initialize WebSocket connection (simulated)
+            function initWebSocket() {
+                // In a real app, this would connect to an actual WebSocket server
+                // For now, we'll simulate the connection
+                wsConnected = true;
+                updateWebSocketStatus();
+                
+                // Simulate receiving completed tasks from kid
+                setTimeout(() => {
+                    if (wsConnected) {
+                        // This would normally be handled by the WebSocket message event
+                        // For now, we'll just show that the connection is working
+                        console.log('WebSocket connection established');
+                    }
+                }, 1000);
+            }
+            
+            // Update WebSocket status indicator
+            function updateWebSocketStatus() {
+                const wsStatus = document.getElementById('wsStatus');
+                if (wsConnected) {
+                    wsStatus.classList.remove('disconnected');
+                    wsStatus.classList.add('connected');
+                    wsStatus.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    wsStatus.classList.remove('connected');
+                    wsStatus.classList.add('disconnected');
+                    wsStatus.innerHTML = '<i class="fas fa-times"></i>';
+                }
+            }
+            
+            // Send message through WebSocket (simulated)
+            function sendWebSocketMessage(message) {
+                if (!wsConnected) {
+                    console.error('WebSocket not connected');
+                    return false;
+                }
+                
+                // In a real app, this would send the message through the WebSocket
+                console.log('Sending WebSocket message:', message);
+                return true;
+            }
+            
             // Apply theme function
             function applyTheme(themeName) {
                 const theme = themes[themeName];
@@ -1079,6 +1398,9 @@
                 loadData();
             }
             
+            // Initialize WebSocket
+            initWebSocket();
+            
             // Save parent name
             document.getElementById('saveParentNameBtn').addEventListener('click', function() {
                 const nameInput = document.getElementById('parentNameInput').value.trim();
@@ -1126,6 +1448,7 @@
                 this.classList.add('active');
                 document.getElementById('tasksContent').style.display = 'block';
                 document.getElementById('awardsContent').style.display = 'none';
+                document.getElementById('confirmContent').style.display = 'none';
                 document.getElementById('settingsContent').style.display = 'none';
             });
             
@@ -1134,7 +1457,27 @@
                 this.classList.add('active');
                 document.getElementById('tasksContent').style.display = 'none';
                 document.getElementById('awardsContent').style.display = 'block';
+                document.getElementById('confirmContent').style.display = 'none';
                 document.getElementById('settingsContent').style.display = 'none';
+            });
+            
+            document.getElementById('confirmTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'none';
+                document.getElementById('awardsContent').style.display = 'none';
+                document.getElementById('confirmContent').style.display = 'block';
+                document.getElementById('settingsContent').style.display = 'none';
+                
+                // Check if there are any completed tasks
+                if (completedTasks.length === 0) {
+                    document.getElementById('noCompletedTasks').style.display = 'block';
+                    document.getElementById('completedTasksList').style.display = 'none';
+                } else {
+                    document.getElementById('noCompletedTasks').style.display = 'none';
+                    document.getElementById('completedTasksList').style.display = 'block';
+                    renderCompletedTasks();
+                }
             });
             
             document.getElementById('settingsTab').addEventListener('click', function() {
@@ -1142,6 +1485,7 @@
                 this.classList.add('active');
                 document.getElementById('tasksContent').style.display = 'none';
                 document.getElementById('awardsContent').style.display = 'none';
+                document.getElementById('confirmContent').style.display = 'none';
                 document.getElementById('settingsContent').style.display = 'block';
                 
                 // Set current name in the input field
@@ -1221,6 +1565,161 @@
                     
                     tasksList.appendChild(taskItem);
                 });
+            }
+            
+            // Render completed tasks
+            function renderCompletedTasks() {
+                const completedTasksList = document.getElementById('completedTasksList');
+                completedTasksList.innerHTML = '';
+                
+                completedTasks.forEach(task => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'completed-task-item';
+                    taskItem.dataset.taskId = task.id;
+                    
+                    taskItem.innerHTML = `
+                        <div class="completed-task-header">
+                            <div class="completed-task-title">${task.name}</div>
+                            <div class="completed-task-points">
+                                <i class="fas fa-coins"></i>
+                                ${task.points}
+                            </div>
+                        </div>
+                        <div class="completed-task-description">${task.description}</div>
+                        <div class="completed-task-actions">
+                            <button class="btn-confirm" data-task-id="${task.id}">Confirm</button>
+                            <button class="btn-reject" data-task-id="${task.id}">Reject</button>
+                        </div>
+                    `;
+                    
+                    completedTasksList.appendChild(taskItem);
+                });
+                
+                // Add event listeners to confirm and reject buttons
+                document.querySelectorAll('.btn-confirm').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const taskId = parseInt(this.getAttribute('data-task-id'));
+                        confirmTask(taskId);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-reject').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const taskId = parseInt(this.getAttribute('data-task-id'));
+                        rejectTask(taskId);
+                    });
+                });
+            }
+            
+            // Confirm task
+            function confirmTask(taskId) {
+                const taskIndex = completedTasks.findIndex(task => task.id === taskId);
+                if (taskIndex === -1) return;
+                
+                const task = completedTasks[taskIndex];
+                
+                // Remove from completed tasks
+                completedTasks.splice(taskIndex, 1);
+                
+                // Add to confirmed tasks (for tracking)
+                if (!window.confirmedTasks) window.confirmedTasks = [];
+                window.confirmedTasks.push(task);
+                
+                // Send confirmation to kid through WebSocket
+                sendWebSocketMessage({
+                    type: 'taskConfirmed',
+                    taskId: taskId,
+                    kidName: task.kidName
+                });
+                
+                // Re-render completed tasks
+                if (completedTasks.length === 0) {
+                    document.getElementById('noCompletedTasks').style.display = 'block';
+                    document.getElementById('completedTasksList').style.display = 'none';
+                    
+                    // Check if all tasks were confirmed
+                    if (window.confirmedTasks.length > 0 && rejectedTasks.length === 0) {
+                        showCongratulationsModal(window.confirmedTasks.length);
+                    }
+                } else {
+                    renderCompletedTasks();
+                }
+            }
+            
+            // Reject task
+            function rejectTask(taskId) {
+                const taskIndex = completedTasks.findIndex(task => task.id === taskId);
+                if (taskIndex === -1) return;
+                
+                const task = completedTasks[taskIndex];
+                
+                // Remove from completed tasks
+                completedTasks.splice(taskIndex, 1);
+                
+                // Add to rejected tasks
+                rejectedTasks.push(task);
+                
+                // Send rejection to kid through WebSocket
+                sendWebSocketMessage({
+                    type: 'taskRejected',
+                    taskId: taskId,
+                    task: task,
+                    kidName: task.kidName
+                });
+                
+                // Re-render completed tasks
+                if (completedTasks.length === 0) {
+                    document.getElementById('noCompletedTasks').style.display = 'block';
+                    document.getElementById('completedTasksList').style.display = 'none';
+                } else {
+                    renderCompletedTasks();
+                }
+            }
+            
+            // Show congratulations modal
+            function showCongratulationsModal(taskCount) {
+                let stars = 1;
+                let message = '';
+                
+                if (taskCount >= 5) {
+                    stars = 3;
+                    message = 'Excellent work! Your child completed all tasks with flying colors!';
+                } else if (taskCount >= 3) {
+                    stars = 2;
+                    message = 'Great job! Your child completed most of the tasks!';
+                } else {
+                    stars = 1;
+                    message = 'Good effort! Keep encouraging your child to complete more tasks!';
+                }
+                
+                // Update modal content
+                const starsContainer = document.getElementById('starsContainer');
+                starsContainer.innerHTML = '';
+                
+                for (let i = 0; i < stars; i++) {
+                    const star = document.createElement('span');
+                    star.className = 'star';
+                    star.textContent = '⭐';
+                    starsContainer.appendChild(star);
+                }
+                
+                document.getElementById('congratsMessage').textContent = message;
+                
+                // Show modal
+                document.getElementById('congratsModal').style.display = 'flex';
+                
+                // Send congratulations to kid through WebSocket
+                sendWebSocketMessage({
+                    type: 'congratulations',
+                    stars: stars,
+                    message: message,
+                    pointsAwarded: taskCount * 10, // 10 points per task
+                    xpAwarded: Math.floor(Math.random() * 31) + 20 // Random between 20-50
+                });
+                
+                // Reset confirmed tasks
+                window.confirmedTasks = [];
+                rejectedTasks = [];
             }
             
             // Toggle task selection
@@ -1351,6 +1850,65 @@
                     kidsContainer.insertBefore(kidCircle, addButton);
                 });
             }
+            
+            // Scan QR button
+            document.getElementById('scanQRBtn').addEventListener('click', function() {
+                document.getElementById('scanQRModal').style.display = 'flex';
+            });
+            
+            document.getElementById('closeScanQRBtn').addEventListener('click', function() {
+                document.getElementById('scanQRModal').style.display = 'none';
+            });
+            
+            // Simulate scan button
+            document.getElementById('simulateScanBtn').addEventListener('click', function() {
+                // Simulate receiving completed tasks from kid
+                const mockCompletedTasks = [
+                    {
+                        id: Date.now() + 1,
+                        name: 'Clean your room',
+                        description: 'Make your bed and organize your toys',
+                        points: 10,
+                        kidName: 'Test Kid',
+                        timestamp: Date.now()
+                    },
+                    {
+                        id: Date.now() + 2,
+                        name: 'Do your homework',
+                        description: 'Complete all homework assignments',
+                        points: 15,
+                        kidName: 'Test Kid',
+                        timestamp: Date.now()
+                    },
+                    {
+                        id: Date.now() + 3,
+                        name: 'Help with dishes',
+                        description: 'Help wash dishes after dinner',
+                        points: 5,
+                        kidName: 'Test Kid',
+                        timestamp: Date.now()
+                    }
+                ];
+                
+                // Add to completed tasks
+                completedTasks = mockCompletedTasks;
+                
+                // Close modal
+                document.getElementById('scanQRModal').style.display = 'none';
+                
+                // Switch to confirm tab
+                document.getElementById('confirmTab').click();
+                
+                // Show completed tasks
+                document.getElementById('noCompletedTasks').style.display = 'none';
+                document.getElementById('completedTasksList').style.display = 'block';
+                renderCompletedTasks();
+            });
+            
+            // Close congratulations modal
+            document.getElementById('closeCongratsBtn').addEventListener('click', function() {
+                document.getElementById('congratsModal').style.display = 'none';
+            });
         });
     </script>
 </body>
