@@ -1,0 +1,839 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Run - Parent Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mona+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            color: #1a365d;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+        
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .greeting {
+            font-family: 'Mona Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .welcome {
+            font-family: 'Mona Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-family: 'Mona Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2b6cb0;
+        }
+        
+        .kids-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .kid-circle {
+            min-width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e6f2ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .kid-circle:hover {
+            border-color: #4299e1;
+            transform: scale(1.05);
+        }
+        
+        .kid-circle i {
+            font-size: 1.5rem;
+            color: #4299e1;
+            margin-bottom: 5px;
+        }
+        
+        .kid-circle span {
+            font-size: 0.7rem;
+            color: #2b6cb0;
+            text-align: center;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            font-family: 'Mona Sans', sans-serif;
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s ease;
+        }
+        
+        .tab.active {
+            color: #4299e1;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #4299e1;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .create-task-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e6f2ff;
+            border-radius: 30px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+        
+        .create-task-btn:hover {
+            background-color: #bee3f8;
+        }
+        
+        .create-task-btn i {
+            margin-right: 8px;
+        }
+        
+        .tasks-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 30px;
+            margin-bottom: 10px;
+            background-color: #f7fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .task-item:hover {
+            background-color: #e6f2ff;
+        }
+        
+        .task-item.selected {
+            background-color: #bee3f8;
+        }
+        
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e0;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .task-item.selected .task-checkbox {
+            background-color: #4299e1;
+            border-color: #4299e1;
+        }
+        
+        .task-item.selected .task-checkbox i {
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .task-content {
+            flex: 1;
+        }
+        
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .task-points {
+            font-size: 0.8rem;
+            color: #718096;
+        }
+        
+        .send-tasks-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .send-tasks-btn {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-family: 'Mona Sans', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 99;
+            transition: all 0.2s ease;
+        }
+        
+        .send-tasks-btn:hover {
+            background-color: #3182ce;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-title {
+            font-family: 'Mona Sans', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2b6cb0;
+            text-align: center;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #718096;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+        
+        .btn-primary {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-family: 'Mona Sans', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            margin-right: 8px;
+        }
+        
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        #qrcode {
+            margin-bottom: 15px;
+        }
+        
+        .qr-message {
+            text-align: center;
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .qr-scanner {
+            width: 100%;
+            height: 200px;
+            background-color: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+        .qr-scanner i {
+            font-size: 2rem;
+            color: #4299e1;
+            margin-bottom: 10px;
+        }
+        
+        .qr-scanner p {
+            color: #718096;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with greeting -->
+        <div class="header">
+            <div class="greeting" id="greeting">Good morning</div>
+            <div class="welcome" id="welcome">Welcome</div>
+        </div>
+        
+        <!-- Kids Section -->
+        <div class="section">
+            <div class="section-title">Kids</div>
+            <div class="kids-container" id="kidsContainer">
+                <div class="kid-circle" id="addChildBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>Add New Child</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tasks Section -->
+        <div class="section">
+            <div class="tabs">
+                <div class="tab active" id="tasksTab">Tasks</div>
+                <div class="tab" id="awardsTab">Awards</div>
+                <div class="tab" id="settingsTab">Settings</div>
+            </div>
+            
+            <div id="tasksContent">
+                <div class="create-task-btn" id="createTaskBtn">
+                    <i class="fas fa-plus"></i>
+                    Create New Task
+                </div>
+                
+                <div class="tasks-list" id="tasksList">
+                    <!-- Tasks will be dynamically added here -->
+                </div>
+            </div>
+            
+            <div id="awardsContent" style="display: none;">
+                <p style="text-align: center; color: #718096; padding: 20px 0;">Awards feature coming soon!</p>
+            </div>
+            
+            <div id="settingsContent" style="display: none;">
+                <p style="text-align: center; color: #718096; padding: 20px 0;">Settings feature coming soon!</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Send Tasks Button -->
+    <button class="send-tasks-btn" id="sendTasksBtn">
+        <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+        Send Tasks
+    </button>
+    
+    <!-- Send Tasks Overlay -->
+    <div class="send-tasks-overlay" id="sendTasksOverlay">
+        <div class="modal">
+            <button class="close-btn" id="closeSendTasksBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Send Tasks to Kid</div>
+            <p style="margin-bottom: 15px; color: #4a5568;">
+                This will create a QR code that can be scanned by your kid's device. After scanning, your kid will receive all tasks you've selected and then the tasks on your device will be deleted forever.
+            </p>
+            <div class="checkbox-group">
+                <input type="checkbox" id="dontShowAgain">
+                <label for="dontShowAgain">Don't show this again</label>
+            </div>
+            <button class="btn-primary" id="continueSendTasksBtn">Continue</button>
+        </div>
+    </div>
+    
+    <!-- Create Task Modal -->
+    <div class="send-tasks-overlay" id="createTaskModal">
+        <div class="modal">
+            <button class="close-btn" id="closeCreateTaskBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Create New Task</div>
+            <div class="form-group">
+                <label class="form-label" for="taskName">Task</label>
+                <input type="text" class="form-input" id="taskName" placeholder="Enter task name">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="taskDescription">Description</label>
+                <input type="text" class="form-input" id="taskDescription" placeholder="Enter task description">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="taskPoints">Points</label>
+                <input type="number" class="form-input" id="taskPoints" placeholder="Enter points" min="1">
+            </div>
+            <button class="btn-primary" id="saveTaskBtn">Done</button>
+        </div>
+    </div>
+    
+    <!-- Add Child Modal -->
+    <div class="send-tasks-overlay" id="addChildModal">
+        <div class="modal">
+            <button class="close-btn" id="closeAddChildBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Scan KidQ Card</div>
+            <div class="qr-scanner">
+                <i class="fas fa-qrcode"></i>
+                <p>QR scanner will be implemented here</p>
+            </div>
+            <button class="btn-primary" id="scanLaterBtn">Scan Later</button>
+        </div>
+    </div>
+    
+    <!-- QR Code Modal -->
+    <div class="send-tasks-overlay" id="qrCodeModal">
+        <div class="modal">
+            <button class="close-btn" id="closeQrCodeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">QR Code for Tasks</div>
+            <div class="qr-container">
+                <div id="qrcode"></div>
+                <p class="qr-message">Share this QR code with your child to send them the selected tasks.</p>
+            </div>
+            <button class="btn-primary" id="doneQrBtn">Done</button>
+        </div>
+    </div>
+    
+    <!-- Parent Name Modal -->
+    <div class="send-tasks-overlay" id="parentNameModal">
+        <div class="modal">
+            <div class="modal-title">Welcome to Reward Run!</div>
+            <p style="margin-bottom: 15px; color: #4a5568;">
+                Let's get started by telling us your name.
+            </p>
+            <div class="form-group">
+                <label class="form-label" for="parentName">Your Name</label>
+                <input type="text" class="form-input" id="parentNameInput" placeholder="Enter your name">
+            </div>
+            <button class="btn-primary" id="saveParentNameBtn">Continue</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize variables
+            let selectedTasks = [];
+            let tasks = [];
+            let kids = [];
+            let parentName = '';
+            let qrCodeInstance = null;
+            
+            // Check if parent name exists in localStorage
+            parentName = localStorage.getItem('parentName');
+            
+            // Get time of day for greeting
+            const hour = new Date().getHours();
+            let greeting = 'Good ';
+            if (hour < 12) {
+                greeting += 'morning';
+            } else if (hour < 18) {
+                greeting += 'afternoon';
+            } else {
+                greeting += 'evening';
+            }
+            
+            // Update UI with greeting and parent name
+            document.getElementById('greeting').textContent = greeting;
+            
+            // Load data from localStorage
+            function loadData() {
+                const savedTasks = localStorage.getItem('tasks');
+                if (savedTasks) {
+                    tasks = JSON.parse(savedTasks);
+                    renderTasks();
+                }
+                
+                const savedKids = localStorage.getItem('kids');
+                if (savedKids) {
+                    kids = JSON.parse(savedKids);
+                    renderKids();
+                }
+            }
+            
+            // Save data to localStorage
+            function saveData() {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                localStorage.setItem('kids', JSON.stringify(kids));
+            }
+            
+            // Show parent name modal if not set
+            if (!parentName) {
+                document.getElementById('parentNameModal').style.display = 'flex';
+            } else {
+                document.getElementById('welcome').textContent = `Welcome, ${parentName}`;
+                loadData();
+            }
+            
+            // Save parent name
+            document.getElementById('saveParentNameBtn').addEventListener('click', function() {
+                const nameInput = document.getElementById('parentNameInput').value.trim();
+                if (nameInput) {
+                    parentName = nameInput;
+                    localStorage.setItem('parentName', parentName);
+                    document.getElementById('welcome').textContent = `Welcome, ${parentName}`;
+                    document.getElementById('parentNameModal').style.display = 'none';
+                    loadData();
+                }
+            });
+            
+            // Tab switching
+            document.getElementById('tasksTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'block';
+                document.getElementById('awardsContent').style.display = 'none';
+                document.getElementById('settingsContent').style.display = 'none';
+            });
+            
+            document.getElementById('awardsTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'none';
+                document.getElementById('awardsContent').style.display = 'block';
+                document.getElementById('settingsContent').style.display = 'none';
+            });
+            
+            document.getElementById('settingsTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'none';
+                document.getElementById('awardsContent').style.display = 'none';
+                document.getElementById('settingsContent').style.display = 'block';
+            });
+            
+            // Create task modal
+            document.getElementById('createTaskBtn').addEventListener('click', function() {
+                document.getElementById('createTaskModal').style.display = 'flex';
+            });
+            
+            document.getElementById('closeCreateTaskBtn').addEventListener('click', function() {
+                document.getElementById('createTaskModal').style.display = 'none';
+            });
+            
+            // Save task
+            document.getElementById('saveTaskBtn').addEventListener('click', function() {
+                const taskName = document.getElementById('taskName').value.trim();
+                const taskDescription = document.getElementById('taskDescription').value.trim();
+                const taskPoints = document.getElementById('taskPoints').value.trim();
+                
+                if (taskName && taskPoints) {
+                    const newTask = {
+                        id: Date.now(),
+                        name: taskName,
+                        description: taskDescription,
+                        points: parseInt(taskPoints)
+                    };
+                    
+                    tasks.push(newTask);
+                    saveData();
+                    renderTasks();
+                    
+                    // Clear form
+                    document.getElementById('taskName').value = '';
+                    document.getElementById('taskDescription').value = '';
+                    document.getElementById('taskPoints').value = '';
+                    
+                    // Close modal
+                    document.getElementById('createTaskModal').style.display = 'none';
+                }
+            });
+            
+            // Render tasks
+            function renderTasks() {
+                const tasksList = document.getElementById('tasksList');
+                tasksList.innerHTML = '';
+                
+                if (tasks.length === 0) {
+                    tasksList.innerHTML = '<p style="text-align: center; color: #718096; padding: 20px 0;">No tasks yet. Create your first task!</p>';
+                    return;
+                }
+                
+                tasks.forEach(task => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'task-item';
+                    taskItem.dataset.taskId = task.id;
+                    
+                    const isSelected = selectedTasks.includes(task.id);
+                    if (isSelected) {
+                        taskItem.classList.add('selected');
+                    }
+                    
+                    taskItem.innerHTML = `
+                        <div class="task-checkbox">
+                            ${isSelected ? '<i class="fas fa-check"></i>' : ''}
+                        </div>
+                        <div class="task-content">
+                            <div class="task-title">${task.name}</div>
+                            <div class="task-points">${task.points} points</div>
+                        </div>
+                    `;
+                    
+                    taskItem.addEventListener('click', function() {
+                        toggleTaskSelection(task.id);
+                    });
+                    
+                    tasksList.appendChild(taskItem);
+                });
+            }
+            
+            // Toggle task selection
+            function toggleTaskSelection(taskId) {
+                const index = selectedTasks.indexOf(taskId);
+                if (index > -1) {
+                    selectedTasks.splice(index, 1);
+                } else {
+                    selectedTasks.push(taskId);
+                }
+                
+                renderTasks();
+                updateSendTasksButton();
+            }
+            
+            // Update send tasks button visibility
+            function updateSendTasksButton() {
+                const sendTasksBtn = document.getElementById('sendTasksBtn');
+                if (selectedTasks.length > 0) {
+                    sendTasksBtn.style.display = 'block';
+                } else {
+                    sendTasksBtn.style.display = 'none';
+                }
+            }
+            
+            // Send tasks
+            document.getElementById('sendTasksBtn').addEventListener('click', function() {
+                const dontShowAgain = localStorage.getItem('dontShowSendTasksMessage');
+                if (dontShowAgain === 'true') {
+                    generateQRCode();
+                } else {
+                    document.getElementById('sendTasksOverlay').style.display = 'flex';
+                }
+            });
+            
+            document.getElementById('closeSendTasksBtn').addEventListener('click', function() {
+                document.getElementById('sendTasksOverlay').style.display = 'none';
+            });
+            
+            document.getElementById('continueSendTasksBtn').addEventListener('click', function() {
+                const dontShowAgainCheckbox = document.getElementById('dontShowAgain');
+                if (dontShowAgainCheckbox.checked) {
+                    localStorage.setItem('dontShowSendTasksMessage', 'true');
+                }
+                
+                document.getElementById('sendTasksOverlay').style.display = 'none';
+                generateQRCode();
+            });
+            
+            // Generate QR code
+            function generateQRCode() {
+                // Get selected tasks
+                const selectedTasksData = tasks.filter(task => selectedTasks.includes(task.id));
+                
+                // Generate 12-digit key
+                const key = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+                
+                // Create data object
+                const qrData = {
+                    key: key,
+                    tasks: selectedTasksData,
+                    timestamp: Date.now()
+                };
+                
+                // Show QR modal
+                document.getElementById('qrCodeModal').style.display = 'flex';
+                
+                // Clear previous QR code if exists
+                const qrContainer = document.getElementById('qrcode');
+                qrContainer.innerHTML = '';
+                
+                // Generate new QR code
+                qrCodeInstance = new QRCode(qrContainer, {
+                    text: JSON.stringify(qrData),
+                    width: 200,
+                    height: 200,
+                    colorDark: '#2b6cb0',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Remove selected tasks from the list
+                tasks = tasks.filter(task => !selectedTasks.includes(task.id));
+                selectedTasks = [];
+                saveData();
+                renderTasks();
+                updateSendTasksButton();
+            }
+            
+            document.getElementById('closeQrCodeBtn').addEventListener('click', function() {
+                document.getElementById('qrCodeModal').style.display = 'none';
+            });
+            
+            document.getElementById('doneQrBtn').addEventListener('click', function() {
+                document.getElementById('qrCodeModal').style.display = 'none';
+            });
+            
+            // Add child
+            document.getElementById('addChildBtn').addEventListener('click', function() {
+                document.getElementById('addChildModal').style.display = 'flex';
+            });
+            
+            document.getElementById('closeAddChildBtn').addEventListener('click', function() {
+                document.getElementById('addChildModal').style.display = 'none';
+            });
+            
+            document.getElementById('scanLaterBtn').addEventListener('click', function() {
+                document.getElementById('addChildModal').style.display = 'none';
+            });
+            
+            // Render kids
+            function renderKids() {
+                const kidsContainer = document.getElementById('kidsContainer');
+                
+                // Clear existing kids except the add button
+                const addButton = document.getElementById('addChildBtn');
+                kidsContainer.innerHTML = '';
+                kidsContainer.appendChild(addButton);
+                
+                // Add each kid
+                kids.forEach(kid => {
+                    const kidCircle = document.createElement('div');
+                    kidCircle.className = 'kid-circle';
+                    kidCircle.innerHTML = `
+                        <i class="fas fa-user"></i>
+                        <span>${kid.name}</span>
+                    `;
+                    kidsContainer.insertBefore(kidCircle, addButton);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
