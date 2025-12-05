@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reward Run</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -26,16 +27,30 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            display: none;
         }
 
-        .welcome-title {
-            font-family: 'Nunito', cursive;
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-text {
+            font-family: 'Inter', sans-serif;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .app-title {
+            font-family: 'Press Start 2P', cursive;
             color: white;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 3rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            line-height: 1.2;
+            font-size: 2rem;
+            font-weight: 400;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            line-height: 1.1;
+            letter-spacing: 1px;
         }
 
         .avatar {
@@ -101,13 +116,125 @@
         .btn-icon {
             width: 32px;
             height: 32px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            font-size: 1.2rem;
+        }
+
+        /* Loader Styles */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loader-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+        }
+
+        .loader-glow {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: white;
+            font-family: 'Nunito', cursive;
+            font-size: 1.1rem;
+        }
+
+        .pin-container {
+            display: none;
+            text-align: center;
+        }
+
+        .pin-title {
+            color: white;
+            font-family: 'Nunito', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .pin-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .pin-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .pin-dot.filled {
+            background: white;
+            border-color: white;
+        }
+
+        .dialpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .dialpad-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.2rem;
+            font-family: 'Nunito', cursive;
+            font-size: 1.4rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .dialpad-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dialpad-btn.backspace {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
         }
 
         @media (max-width: 480px) {
-            .welcome-title {
-                font-size: 2rem;
-                margin-bottom: 2rem;
+            .app-title {
+                font-size: 1.5rem;
             }
             
             .avatar {
@@ -123,114 +250,180 @@
                 padding: 1.2rem 1.5rem;
                 font-size: 1.1rem;
             }
-            
-            .btn-icon {
-                width: 28px;
-                height: 28px;
-            }
-        }
-
-        /* Custom icons using CSS */
-        .parent-icon {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            position: relative;
-        }
-
-        .parent-icon::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 12px;
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 16px 0 0 white, 
-                       -8px 8px 0 0 white, 
-                       8px 8px 0 0 white;
-        }
-
-        .child-icon {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            position: relative;
-        }
-
-        .child-icon::before {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 10px;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 14px 0 0 white;
-        }
-
-        .child-icon::after {
-            content: '';
-            position: absolute;
-            top: 18px;
-            left: 8px;
-            width: 16px;
-            height: 8px;
-            background: white;
-            border-radius: 8px 8px 0 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="loader" class="loader-overlay">
+        <div class="loader-content">
+            <div class="loader-glow"></div>
+            <div class="loader-text">Loading Reward Run...</div>
+        </div>
+    </div>
+
+    <div id="mainContainer" class="container">
         <img src="https://i.ibb.co/4gjb2QY1/b-A-shiny-golden-game.png" alt="Reward Run Logo" class="avatar">
         
-        <h1 class="welcome-title">Welcome to Reward Run</h1>
+        <div class="welcome-section">
+            <div class="welcome-text">Welcome to</div>
+            <h1 class="app-title">Reward Run</h1>
+        </div>
         
         <div class="glass-card">
             <div class="role-buttons">
                 <button class="role-btn parent-btn" onclick="selectRole('parent')">
-                    <span class="parent-icon"></span>
+                    <i class="fas fa-user-shield btn-icon"></i>
                     Parent
                 </button>
                 
                 <button class="role-btn child-btn" onclick="selectRole('child')">
-                    <span class="child-icon"></span>
+                    <i class="fas fa-child btn-icon"></i>
                     Child
                 </button>
             </div>
         </div>
     </div>
 
+    <div id="pinContainer" class="pin-container">
+        <div class="glass-card">
+            <div class="pin-title">Enter Parent PIN</div>
+            <div class="pin-input" id="pinInput">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+            <div class="dialpad">
+                <button class="dialpad-btn" onclick="addDigit('1')">1</button>
+                <button class="dialpad-btn" onclick="addDigit('2')">2</button>
+                <button class="dialpad-btn" onclick="addDigit('3')">3</button>
+                <button class="dialpad-btn" onclick="addDigit('4')">4</button>
+                <button class="dialpad-btn" onclick="addDigit('5')">5</button>
+                <button class="dialpad-btn" onclick="addDigit('6')">6</button>
+                <button class="dialpad-btn" onclick="addDigit('7')">7</button>
+                <button class="dialpad-btn" onclick="addDigit('8')">8</button>
+                <button class="dialpad-btn" onclick="addDigit('9')">9</button>
+                <button class="dialpad-btn"></button>
+                <button class="dialpad-btn" onclick="addDigit('0')">0</button>
+                <button class="dialpad-btn backspace" onclick="backspace()">
+                    <i class="fas fa-backspace"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        let currentPin = '';
+        let isSettingUpPin = false;
+
+        function checkResources() {
             const savedRole = localStorage.getItem('userMode');
-            if (savedRole) {
-                redirectToPage(savedRole);
-            }
-        });
-
-        function selectRole(role) {
-
-            localStorage.setItem('userMode', role);
-
-            event.target.style.transform = 'scale(0.95)';
-            event.target.style.opacity = '0.8';
+            const savedPin = localStorage.getItem('parentPin');
             
-            setTimeout(() => {
-                redirectToPage(role);
-            }, 150);
+            const hasVisited = localStorage.getItem('hasVisited');
+            if (!hasVisited) {
+                localStorage.setItem('hasVisited', 'true');
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('mainContainer').style.display = 'block';
+                    
+                    if (savedRole === 'parent' && savedPin) {
+                        showPinInterface();
+                    }
+                }, 10000);
+            } else {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                
+                if (savedRole === 'parent' && savedPin) {
+                    showPinInterface();
+                }
+            }
         }
 
-        function redirectToPage(role) {
+        function selectRole(role) {
             if (role === 'parent') {
-                window.location.href = 'parent.html';
-            } else if (role === 'child') {
+                const savedPin = localStorage.getItem('parentPin');
+                if (savedPin) {
+                    document.getElementById('mainContainer').style.display = 'none';
+                    showPinInterface();
+                } else {
+                    localStorage.setItem('userMode', 'parent');
+                    setupNewPin();
+                }
+            } else {
+                localStorage.setItem('userMode', 'child');
                 window.location.href = 'kid.html';
             }
         }
+
+        function showPinInterface() {
+            document.getElementById('pinContainer').style.display = 'block';
+            currentPin = '';
+            updatePinDots();
+        }
+
+        function setupNewPin() {
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('pinContainer').style.display = 'block';
+            document.querySelector('.pin-title').textContent = 'Set Up Parent PIN (4 digits)';
+            isSettingUpPin = true;
+            currentPin = '';
+            updatePinDots();
+        }
+
+        function addDigit(digit) {
+            if (currentPin.length < 4) {
+                currentPin += digit;
+                updatePinDots();
+                
+                if (currentPin.length === 4) {
+                    if (isSettingUpPin) {
+                        localStorage.setItem('parentPin', currentPin);
+                        isSettingUpPin = false;
+                        document.querySelector('.pin-title').textContent = 'Enter Parent PIN';
+                        currentPin = '';
+                        updatePinDots();
+                    } else {
+                        const savedPin = localStorage.getItem('parentPin');
+                        if (currentPin === savedPin) {
+                            window.location.href = 'parent.html';
+                        } else {
+                            currentPin = '';
+                            updatePinDots();
+                            const dots = document.querySelectorAll('.pin-dot');
+                            dots.forEach(dot => {
+                                dot.style.background = '#ff6b6b';
+                                setTimeout(() => {
+                                    updatePinDots();
+                                }, 500);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        function backspace() {
+            if (currentPin.length > 0) {
+                currentPin = currentPin.slice(0, -1);
+                updatePinDots();
+            }
+        }
+
+        function updatePinDots() {
+            const dots = document.querySelectorAll('.pin-dot');
+            dots.forEach((dot, index) => {
+                if (index < currentPin.length) {
+                    dot.classList.add('filled');
+                } else {
+                    dot.classList.remove('filled');
+                }
+            });
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', checkResources);
     </script>
 </body>
 </html>
