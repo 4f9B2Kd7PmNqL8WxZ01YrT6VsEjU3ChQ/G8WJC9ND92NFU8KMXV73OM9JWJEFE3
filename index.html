@@ -3,427 +3,536 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reward Run</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Nunito:wght@700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Reward Run - Gamified Chores App</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #fda085 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
         }
-
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
         .container {
-            width: 100%;
+            width: 90%;
             max-width: 400px;
+            padding: 2rem;
+            z-index: 1;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 2.5rem 1.5rem;
             text-align: center;
-            display: none;
+            animation: fadeIn 0.8s ease-out;
         }
-
-        .welcome-section {
-            margin-bottom: 2rem;
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
+        
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .title {
+            margin-bottom: 2.5rem;
+        }
+        
         .welcome-text {
             font-family: 'Inter', sans-serif;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.5px;
         }
-
-        .app-title {
-            font-family: 'Press Start 2P', cursive;
-            color: white;
-            font-size: 2rem;
-            font-weight: 400;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            line-height: 1.1;
-            letter-spacing: 1px;
+        
+        .app-name {
+            font-family: 'Fredoka', cursive;
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #fff, #f8f8f8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 2rem;
-            object-fit: cover;
-            border: 4px solid rgba(255,255,255,0.3);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-
+        
         .role-buttons {
             display: flex;
-            flex-direction: column;
             gap: 1.5rem;
             margin-top: 2rem;
         }
-
+        
         .role-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
-            padding: 1.5rem 2rem;
-            border: none;
-            border-radius: 16px;
-            font-family: 'Nunito', cursive;
-            font-size: 1.3rem;
-            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color: white;
-            min-height: 70px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-
+        
         .role-btn:active {
             transform: scale(0.95);
-            opacity: 0.8;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
-
-        .parent-btn {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+        
+        .role-btn i {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
         }
-
-        .child-btn {
-            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-            box-shadow: 0 4px 20px rgba(78, 205, 196, 0.3);
+        
+        .parent-btn i {
+            color: #4361ee;
         }
-
-        .btn-icon {
-            width: 32px;
-            height: 32px;
-            font-size: 1.2rem;
+        
+        .child-btn i {
+            color: #f72585;
         }
-
-        /* Loader Styles */
-        .loader-overlay {
+        
+        .role-btn span {
+            font-family: 'Fredoka', cursive;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        
+        /* Loader */
+        .loader-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             z-index: 1000;
         }
-
-        .loader-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
-        }
-
-        .loader-glow {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #667eea;
+        
+        .loader {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+            position: relative;
+            animation: glow 1.5s infinite ease-in-out;
         }
-
-        @keyframes spin {
+        
+        .loader:before, .loader:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .loader:before {
+            animation: rotate 2s infinite linear;
+        }
+        
+        .loader:after {
+            animation: rotate 2s infinite linear reverse;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 1); }
+        }
+        
+        @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .loader-text {
-            color: white;
-            font-family: 'Nunito', cursive;
-            font-size: 1.1rem;
-        }
-
-        .pin-container {
+        
+        /* PIN Modal */
+        .pin-modal {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .pin-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .pin-title {
+            font-family: 'Fredoka', cursive;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
             text-align: center;
         }
-
-        .pin-title {
-            color: white;
-            font-family: 'Nunito', cursive;
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .pin-input {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1rem 0;
+        
+        .pin-display {
             display: flex;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 10px;
+            margin-bottom: 1.5rem;
         }
-
+        
         .pin-dot {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: #ddd;
+            transition: all 0.3s ease;
         }
-
+        
         .pin-dot.filled {
-            background: white;
-            border-color: white;
+            background: #4361ee;
+            animation: popIn 0.3s ease;
         }
-
-        .dialpad {
+        
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .pin-keypad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.8rem;
-            margin-top: 1rem;
+            gap: 15px;
+            margin-bottom: 1rem;
         }
-
-        .dialpad-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            padding: 1.2rem;
-            font-family: 'Nunito', cursive;
-            font-size: 1.4rem;
-            color: white;
+        
+        .pin-key {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #333;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: none;
+            margin: 0 auto;
         }
-
-        .dialpad-btn:active {
-            transform: scale(0.95);
-            background: rgba(255, 255, 255, 0.3);
+        
+        .pin-key:active {
+            transform: scale(0.9);
+            background: rgba(67, 97, 238, 0.2);
         }
-
-        .dialpad-btn.backspace {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        
+        .pin-key.backspace {
+            background: rgba(247, 37, 133, 0.2);
+            grid-column: 3;
         }
-
-        @media (max-width: 480px) {
-            .app-title {
-                font-size: 1.5rem;
-            }
-            
-            .avatar {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .glass-card {
-                padding: 1.5rem;
-            }
-            
-            .role-btn {
-                padding: 1.2rem 1.5rem;
-                font-size: 1.1rem;
-            }
+        
+        .pin-key.backspace i {
+            font-size: 1.2rem;
+        }
+        
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div id="loader" class="loader-overlay">
-        <div class="loader-content">
-            <div class="loader-glow"></div>
-            <div class="loader-text">Loading Reward Run...</div>
-        </div>
+    <!-- Loader -->
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
     </div>
-
-    <div id="mainContainer" class="container">
-        <img src="https://i.ibb.co/4gjb2QY1/b-A-shiny-golden-game.png" alt="Reward Run Logo" class="avatar">
-        
-        <div class="welcome-section">
-            <div class="welcome-text">Welcome to</div>
-            <h1 class="app-title">Reward Run</h1>
-        </div>
-        
-        <div class="glass-card">
-            <div class="role-buttons">
-                <button class="role-btn parent-btn" onclick="selectRole('parent')">
-                    <i class="fas fa-user-shield btn-icon"></i>
-                    Parent
-                </button>
-                
-                <button class="role-btn child-btn" onclick="selectRole('child')">
-                    <i class="fas fa-child btn-icon"></i>
-                    Child
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="pinContainer" class="pin-container">
-        <div class="glass-card">
-            <div class="pin-title">Enter Parent PIN</div>
-            <div class="pin-input" id="pinInput">
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-                <div class="pin-dot"></div>
-            </div>
-            <div class="dialpad">
-                <button class="dialpad-btn" onclick="addDigit('1')">1</button>
-                <button class="dialpad-btn" onclick="addDigit('2')">2</button>
-                <button class="dialpad-btn" onclick="addDigit('3')">3</button>
-                <button class="dialpad-btn" onclick="addDigit('4')">4</button>
-                <button class="dialpad-btn" onclick="addDigit('5')">5</button>
-                <button class="dialpad-btn" onclick="addDigit('6')">6</button>
-                <button class="dialpad-btn" onclick="addDigit('7')">7</button>
-                <button class="dialpad-btn" onclick="addDigit('8')">8</button>
-                <button class="dialpad-btn" onclick="addDigit('9')">9</button>
-                <button class="dialpad-btn"></button>
-                <button class="dialpad-btn" onclick="addDigit('0')">0</button>
-                <button class="dialpad-btn backspace" onclick="backspace()">
-                    <i class="fas fa-backspace"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let currentPin = '';
-        let isSettingUpPin = false;
-
-        function checkResources() {
-            const savedRole = localStorage.getItem('userMode');
-            const savedPin = localStorage.getItem('parentPin');
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="glass-card" id="welcomeScreen">
+            <img src="https://i.ibb.co/4gjb2QY1/b-A-shiny-golden-game.png" alt="Reward Run Icon" class="app-icon">
             
-            const hasVisited = localStorage.getItem('hasVisited');
-            if (!hasVisited) {
-                localStorage.setItem('hasVisited', 'true');
+            <div class="title">
+                <div class="welcome-text">Welcome to</div>
+                <div class="app-name">Reward Run</div>
+            </div>
+            
+            <div class="role-buttons">
+                <div class="role-btn parent-btn" id="parentBtn">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Parent</span>
+                </div>
+                <div class="role-btn child-btn" id="childBtn">
+                    <i class="fas fa-child"></i>
+                    <span>Child</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PIN Modal -->
+    <div class="pin-modal" id="pinModal">
+        <div class="pin-container">
+            <div class="pin-title" id="pinTitle">Setup Your PIN</div>
+            <div class="pin-display">
+                <div class="pin-dot" id="pin1"></div>
+                <div class="pin-dot" id="pin2"></div>
+                <div class="pin-dot" id="pin3"></div>
+                <div class="pin-dot" id="pin4"></div>
+            </div>
+            <div class="pin-keypad">
+                <div class="pin-key" data-value="1">1</div>
+                <div class="pin-key" data-value="2">2</div>
+                <div class="pin-key" data-value="3">3</div>
+                <div class="pin-key" data-value="4">4</div>
+                <div class="pin-key" data-value="5">5</div>
+                <div class="pin-key" data-value="6">6</div>
+                <div class="pin-key" data-value="7">7</div>
+                <div class="pin-key" data-value="8">8</div>
+                <div class="pin-key" data-value="9">9</div>
+                <div class="pin-key" data-value="0">0</div>
+                <div class="pin-key backspace" id="backspace">
+                    <i class="fas fa-backspace"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if it's the first visit
+            const isFirstVisit = localStorage.getItem('isFirstVisit');
+            const userMode = localStorage.getItem('userMode');
+            const parentPin = localStorage.getItem('parentPin');
+            
+            // Show loader for 10 seconds on first visit
+            if (!isFirstVisit) {
+                localStorage.setItem('isFirstVisit', 'true');
                 setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('mainContainer').style.display = 'block';
-                    
-                    if (savedRole === 'parent' && savedPin) {
-                        showPinInterface();
-                    }
+                    document.getElementById('loader').classList.add('hidden');
                 }, 10000);
             } else {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
+                document.getElementById('loader').classList.add('hidden');
                 
-                if (savedRole === 'parent' && savedPin) {
-                    showPinInterface();
-                }
-            }
-        }
-
-        function selectRole(role) {
-            if (role === 'parent') {
-                const savedPin = localStorage.getItem('parentPin');
-                if (savedPin) {
-                    document.getElementById('mainContainer').style.display = 'none';
-                    showPinInterface();
-                } else {
-                    localStorage.setItem('userMode', 'parent');
-                    setupNewPin();
-                }
-            } else {
-                localStorage.setItem('userMode', 'child');
-                window.location.href = 'kid.html';
-            }
-        }
-
-        function showPinInterface() {
-            document.getElementById('pinContainer').style.display = 'block';
-            currentPin = '';
-            updatePinDots();
-        }
-
-        function setupNewPin() {
-            document.getElementById('mainContainer').style.display = 'none';
-            document.getElementById('pinContainer').style.display = 'block';
-            document.querySelector('.pin-title').textContent = 'Set Up Parent PIN (4 digits)';
-            isSettingUpPin = true;
-            currentPin = '';
-            updatePinDots();
-        }
-
-        function addDigit(digit) {
-            if (currentPin.length < 4) {
-                currentPin += digit;
-                updatePinDots();
-                
-                if (currentPin.length === 4) {
-                    if (isSettingUpPin) {
-                        localStorage.setItem('parentPin', currentPin);
-                        isSettingUpPin = false;
-                        document.querySelector('.pin-title').textContent = 'Enter Parent PIN';
-                        currentPin = '';
-                        updatePinDots();
+                // If user mode is saved, redirect to appropriate page
+                if (userMode === 'child') {
+                    window.location.href = 'kid.html';
+                    return;
+                } else if (userMode === 'parent') {
+                    // If parent mode, check if PIN is set
+                    if (parentPin) {
+                        // Show PIN verification modal
+                        showPinModal(false);
                     } else {
-                        const savedPin = localStorage.getItem('parentPin');
-                        if (currentPin === savedPin) {
-                            window.location.href = 'parent.html';
-                        } else {
-                            currentPin = '';
-                            updatePinDots();
-                            const dots = document.querySelectorAll('.pin-dot');
-                            dots.forEach(dot => {
-                                dot.style.background = '#ff6b6b';
-                                setTimeout(() => {
-                                    updatePinDots();
-                                }, 500);
-                            });
-                        }
+                        // Show PIN setup modal
+                        showPinModal(true);
+                    }
+                    return;
+                }
+            }
+            
+            // PIN functionality
+            let pinInput = '';
+            let isSetupMode = true;
+            
+            function showPinModal(isSetup) {
+                isSetupMode = isSetup;
+                pinInput = '';
+                updatePinDisplay();
+                
+                const modal = document.getElementById('pinModal');
+                const title = document.getElementById('pinTitle');
+                
+                if (isSetup) {
+                    title.textContent = 'Setup Your PIN';
+                } else {
+                    title.textContent = 'Enter Your PIN';
+                }
+                
+                modal.style.display = 'flex';
+            }
+            
+            function hidePinModal() {
+                document.getElementById('pinModal').style.display = 'none';
+            }
+            
+            function updatePinDisplay() {
+                for (let i = 1; i <= 4; i++) {
+                    const dot = document.getElementById(`pin${i}`);
+                    if (i <= pinInput.length) {
+                        dot.classList.add('filled');
+                    } else {
+                        dot.classList.remove('filled');
                     }
                 }
             }
-        }
-
-        function backspace() {
-            if (currentPin.length > 0) {
-                currentPin = currentPin.slice(0, -1);
-                updatePinDots();
+            
+            function handlePinInput(value) {
+                if (pinInput.length < 4) {
+                    pinInput += value;
+                    updatePinDisplay();
+                    
+                    if (pinInput.length === 4) {
+                        setTimeout(() => {
+                            if (isSetupMode) {
+                                // First time setup, ask to confirm
+                                const tempPin = pinInput;
+                                pinInput = '';
+                                updatePinDisplay();
+                                
+                                document.getElementById('pinTitle').textContent = 'Confirm Your PIN';
+                                isSetupMode = false;
+                                
+                                // Add event listener for the second PIN entry
+                                const checkPin = () => {
+                                    if (pinInput.length === 4) {
+                                        if (pinInput === tempPin) {
+                                            // PINs match, save and redirect
+                                            localStorage.setItem('parentPin', pinInput);
+                                            localStorage.setItem('userMode', 'parent');
+                                            window.location.href = 'parent.html';
+                                        } else {
+                                            // PINs don't match
+                                            document.getElementById('pinTitle').textContent = 'PINs don\'t match. Try again.';
+                                            pinInput = '';
+                                            updatePinDisplay();
+                                            isSetupMode = true;
+                                        }
+                                        
+                                        // Remove the event listener to prevent multiple calls
+                                        document.removeEventListener('pinInputComplete', checkPin);
+                                    }
+                                };
+                                
+                                document.addEventListener('pinInputComplete', checkPin);
+                            } else {
+                                // Verification mode
+                                const savedPin = localStorage.getItem('parentPin');
+                                if (pinInput === savedPin) {
+                                    localStorage.setItem('userMode', 'parent');
+                                    window.location.href = 'parent.html';
+                                } else {
+                                    document.getElementById('pinTitle').textContent = 'Incorrect PIN. Try again.';
+                                    pinInput = '';
+                                    updatePinDisplay();
+                                }
+                            }
+                        }, 300);
+                    } else {
+                        // Trigger custom event for PIN input change
+                        document.dispatchEvent(new CustomEvent('pinInputComplete'));
+                    }
+                }
             }
-        }
-
-        function updatePinDots() {
-            const dots = document.querySelectorAll('.pin-dot');
-            dots.forEach((dot, index) => {
-                if (index < currentPin.length) {
-                    dot.classList.add('filled');
+            
+            function handleBackspace() {
+                if (pinInput.length > 0) {
+                    pinInput = pinInput.substring(0, pinInput.length - 1);
+                    updatePinDisplay();
+                }
+            }
+            
+            // PIN keypad event listeners
+            document.querySelectorAll('.pin-key:not(.backspace)').forEach(key => {
+                key.addEventListener('click', function() {
+                    handlePinInput(this.getAttribute('data-value'));
+                });
+            });
+            
+            document.getElementById('backspace').addEventListener('click', handleBackspace);
+            
+            // Role button event listeners
+            document.getElementById('parentBtn').addEventListener('click', function() {
+                const parentPin = localStorage.getItem('parentPin');
+                
+                if (parentPin) {
+                    // PIN is already set, show verification
+                    showPinModal(false);
                 } else {
-                    dot.classList.remove('filled');
+                    // First time parent login, show PIN setup
+                    showPinModal(true);
                 }
             });
-        }
-
-        // Initialize when page loads
-        window.addEventListener('load', checkResources);
+            
+            document.getElementById('childBtn').addEventListener('click', function() {
+                localStorage.setItem('userMode', 'child');
+                window.location.href = 'kid.html';
+            });
+        });
     </script>
 </body>
 </html>
