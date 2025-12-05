@@ -1,0 +1,1735 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Run - Kid Dashboard</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Press+Start+2P&family=Orbitron:wght@400;500;600;700;900&family=Bungee&family=Permanent+Marker&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #00ff88;
+            --secondary-color: #ff00ff;
+            --background-color: #121212;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: rgba(255, 255, 255, 0.2);
+            --shadow-color: rgba(0, 255, 136, 0.3);
+            --gradient-start: #00ff88;
+            --gradient-end: #ff00ff;
+            --font-primary: 'Fredoka', sans-serif;
+            --font-display: 'Press Start 2P', cursive;
+            --font-gaming: 'Orbitron', sans-serif;
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('https://i.ibb.co/gM7k8MZp/Image-fx.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.7);
+            transition: all 1s ease;
+        }
+        
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Neon Glow Effect */
+        .neon-glow {
+            text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+        }
+        
+        .neon-border {
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color);
+        }
+        
+        /* Profile Card */
+        .profile-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px 0 rgba(0, 255, 136, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            box-shadow: 0 0 15px var(--primary-color);
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-family: var(--font-gaming);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .world-name {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            min-width: 80px;
+        }
+        
+        .stat-value {
+            font-family: var(--font-gaming);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .xp-bar-container {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .xp-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            width: 0%;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .xp-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .xp-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Section Card */
+        .section-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px 0 rgba(0, 255, 136, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+            transition: color var(--transition-speed) ease;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        /* Tasks */
+        .no-tasks {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+        
+        .no-tasks-icon {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .no-tasks-text {
+            font-family: var(--font-gaming);
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .get-tasks-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .get-tasks-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+        
+        .get-tasks-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .task-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .task-title {
+            font-family: var(--font-gaming);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .task-points {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .task-points i {
+            margin-right: 5px;
+        }
+        
+        .task-description {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .task-time {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        .task-complete-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .task-complete-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .task-complete-btn.completed {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .progress-title {
+            font-family: var(--font-gaming);
+            font-weight: 600;
+        }
+        
+        .progress-value {
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .progress-message {
+            font-family: var(--font-gaming);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .confirm-tasks-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: none;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .confirm-tasks-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .confirm-tasks-btn:hover::before {
+            left: 100%;
+        }
+        
+        .confirm-tasks-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+        }
+        
+        .confirm-tasks-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .modal {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            animation: modalSlideIn 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes modalSlideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+        }
+        
+        .modal-title {
+            font-family: var(--font-gaming);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary-color);
+            transform: rotate(90deg);
+        }
+        
+        .carousel {
+            position: relative;
+            height: 200px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .carousel-item.active {
+            opacity: 1;
+        }
+        
+        .carousel-label {
+            font-family: var(--font-gaming);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+        
+        .gender-options {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .gender-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            text-align: center;
+        }
+        
+        .gender-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .gender-option.selected {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .gender-option i {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .avatar-options {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        .avatar-option {
+            font-size: 2rem;
+            margin: 5px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            padding: 10px;
+            border-radius: 50%;
+        }
+        
+        .avatar-option:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .avatar-option.selected {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .carousel-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .carousel-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all var(--transition-speed) ease;
+        }
+        
+        .indicator.active {
+            background: var(--primary-color);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-family: var(--font-gaming);
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            transition: all var(--transition-speed) ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+        
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        #qrcode {
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+        }
+        
+        .qr-message {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .qr-scanner {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+        .qr-scanner i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .qr-scanner p {
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        /* Level Up Modal */
+        .level-up-modal {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            animation: levelUpAnimation 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        @keyframes levelUpAnimation {
+            0% { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        .level-up-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+        
+        .stars {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .star {
+            color: #FFD700;
+            display: inline-block;
+            animation: starPop 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .star:nth-child(1) { animation-delay: 0.1s; }
+        .star:nth-child(2) { animation-delay: 0.2s; }
+        .star:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes starPop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .level-up-message {
+            font-family: var(--font-gaming);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .bonus-points {
+            font-family: var(--font-gaming);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .next-level {
+            font-family: var(--font-gaming);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Task completion animation */
+        @keyframes taskComplete {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .task-complete-animation {
+            animation: taskComplete 0.5s ease;
+        }
+        
+        /* Emoji animation */
+        .emoji-animation {
+            display: inline-block;
+            animation: emojiBounce 0.5s ease;
+        }
+        
+        @keyframes emojiBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container" id="backgroundContainer"></div>
+    
+    <div class="container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar" id="profileAvatar">👦</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">Player</div>
+                    <div class="world-name" id="worldName">Cloud Kingdom</div>
+                </div>
+                <div class="stat-item" id="pointsContainer">
+                    <div class="stat-value" id="pointsValue">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+            </div>
+            
+            <div class="xp-bar-container">
+                <div class="xp-bar" id="xpBar"></div>
+                <div class="xp-text" id="xpText">0 / 500 XP</div>
+            </div>
+        </div>
+        
+        <!-- Section Card -->
+        <div class="section-card">
+            <div class="tabs">
+                <div class="tab active" id="tasksTab">Tasks</div>
+                <div class="tab" id="rewardsTab">Rewards</div>
+                <div class="tab" id="statusTab">Status</div>
+            </div>
+            
+            <div class="tab-content" id="tasksContent">
+                <div class="no-tasks" id="noTasksContainer">
+                    <div class="no-tasks-icon">📋</div>
+                    <div class="no-tasks-text">No tasks yet! Get tasks from your parent to start earning points.</div>
+                    <button class="get-tasks-btn" id="getTasksBtn">
+                        <i class="fas fa-qrcode"></i>
+                        Get Tasks
+                    </button>
+                </div>
+                
+                <div id="tasksList" class="hidden">
+                    <!-- Tasks will be dynamically added here -->
+                </div>
+                
+                <div class="progress-container hidden" id="progressContainer">
+                    <div class="progress-header">
+                        <div class="progress-title">Tasks Completed</div>
+                        <div class="progress-value" id="progressValue">0 / 0</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-message" id="progressMessage">Keep going! You're doing great!</div>
+                </div>
+                
+                <button class="confirm-tasks-btn hidden" id="confirmTasksBtn">
+                    <i class="fas fa-check-circle"></i>
+                    Confirm Completed Tasks
+                </button>
+            </div>
+            
+            <div class="tab-content hidden" id="rewardsContent">
+                <div class="no-tasks">
+                    <div class="no-tasks-icon">🎁</div>
+                    <div class="no-tasks-text">No rewards yet! Complete tasks to earn rewards.</div>
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="statusContent">
+                <div class="no-tasks">
+                    <div class="no-tasks-icon">📊</div>
+                    <div class="no-tasks-text">Your status and achievements will appear here.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Registration Modal -->
+    <div class="modal-overlay" id="registrationModal">
+        <div class="modal">
+            <div class="modal-title">Create Your Profile</div>
+            
+            <div class="carousel">
+                <!-- Name Slide -->
+                <div class="carousel-item active" id="nameSlide">
+                    <div class="carousel-label">What's your name?</div>
+                    <input type="text" class="form-input" id="nameInput" placeholder="Enter your name">
+                </div>
+                
+                <!-- Birth Year Slide -->
+                <div class="carousel-item" id="birthYearSlide">
+                    <div class="carousel-label">What year were you born?</div>
+                    <input type="number" class="form-input" id="birthYearInput" placeholder="Enter birth year" min="2010" max="2023">
+                </div>
+                
+                <!-- Gender Slide -->
+                <div class="carousel-item" id="genderSlide">
+                    <div class="carousel-label">Are you a boy or a girl?</div>
+                    <div class="gender-options">
+                        <div class="gender-option" id="boyOption">
+                            <i class="fas fa-mars"></i>
+                            <span>Boy</span>
+                        </div>
+                        <div class="gender-option" id="girlOption">
+                            <i class="fas fa-venus"></i>
+                            <span>Girl</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Avatar Slide -->
+                <div class="carousel-item" id="avatarSlide">
+                    <div class="carousel-label">Choose your avatar</div>
+                    <div class="avatar-options" id="boyAvatars">
+                        <div class="avatar-option" data-avatar="👦">👦</div>
+                        <div class="avatar-option" data-avatar="🧒">🧒</div>
+                        <div class="avatar-option" data-avatar="👶">👶</div>
+                        <div class="avatar-option" data-avatar="🦸">🦸</div>
+                        <div class="avatar-option" data-avatar="🧑‍🚀">🧑‍🚀</div>
+                    </div>
+                    <div class="avatar-options hidden" id="girlAvatars">
+                        <div class="avatar-option" data-avatar="👧">👧</div>
+                        <div class="avatar-option" data-avatar="🧒">🧒</div>
+                        <div class="avatar-option" data-avatar="👶">👶</div>
+                        <div class="avatar-option" data-avatar="🦸‍♀️">🦸‍♀️</div>
+                        <div class="avatar-option" data-avatar="👩‍🚀">👩‍🚀</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="carousel-nav">
+                <div class="carousel-btn" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="carousel-indicators">
+                    <div class="indicator active" data-slide="0"></div>
+                    <div class="indicator" data-slide="1"></div>
+                    <div class="indicator" data-slide="2"></div>
+                    <div class="indicator" data-slide="3"></div>
+                </div>
+                <div class="carousel-btn" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            
+            <button class="btn-primary" id="doneBtn" style="margin-top: 20px;">Done</button>
+        </div>
+    </div>
+    
+    <!-- KidQ Card Modal -->
+    <div class="modal-overlay hidden" id="kidQCardModal">
+        <div class="modal">
+            <button class="modal-close" id="closeKidQCardBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title neon-glow">Your KidQ Card</div>
+            <div class="qr-container">
+                <div id="kidQQRCode"></div>
+                <div class="qr-message">This is your unique KidQ Card. Show this to your parent to add you to their account.</div>
+                <div class="qr-message">You can view this card anytime in Profile > KidQ Card.</div>
+            </div>
+            <button class="btn-primary" id="downloadKidQBtn">Download Card</button>
+        </div>
+    </div>
+    
+    <!-- Welcome Modal -->
+    <div class="modal-overlay hidden" id="welcomeModal">
+        <div class="modal">
+            <div class="modal-title neon-glow">Welcome to Reward Run!</div>
+            <div class="no-tasks">
+                <div class="no-tasks-icon">🎮</div>
+                <div class="no-tasks-text" id="welcomeText">Welcome, Player! Get ready for an amazing adventure!</div>
+            </div>
+            <button class="btn-primary" id="continueBtn">Continue</button>
+        </div>
+    </div>
+    
+    <!-- QR Scanner Modal -->
+    <div class="modal-overlay hidden" id="qrScannerModal">
+        <div class="modal">
+            <button class="modal-close" id="closeQrScannerBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Scan Tasks QR Code</div>
+            <div class="qr-scanner">
+                <i class="fas fa-qrcode"></i>
+                <p>Scan the QR code from your parent to receive tasks</p>
+            </div>
+            <button class="btn-primary" id="scanTasksBtn">Simulate Scan</button>
+        </div>
+    </div>
+    
+    <!-- Confirm Tasks QR Modal -->
+    <div class="modal-overlay hidden" id="confirmTasksQRModal">
+        <div class="modal">
+            <button class="modal-close" id="closeConfirmTasksQRBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-title">Confirm Completed Tasks</div>
+            <div class="qr-container">
+                <div id="confirmTasksQRCode"></div>
+                <div class="qr-message">Show this QR code to your parent to confirm your completed tasks.</div>
+            </div>
+            <button class="btn-primary" id="downloadConfirmQRBtn">Download QR Code</button>
+        </div>
+    </div>
+    
+    <!-- Level Up Modal -->
+    <div class="modal-overlay hidden" id="levelUpModal">
+        <div class="level-up-modal">
+            <div class="level-up-title">LEVEL UP!</div>
+            <div class="stars" id="starsContainer">
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+            </div>
+            <div class="level-up-message" id="levelUpMessage">Congratulations! You've reached a new level!</div>
+            <div class="bonus-points" id="bonusPoints">+100 Bonus Points!</div>
+            <div class="next-level" id="nextLevel">Next: Mystic Island at 500 XP</div>
+            <button class="btn-primary" id="continueLevelUpBtn">Continue</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize variables
+            let currentSlide = 0;
+            let kidProfile = {
+                name: '',
+                birthYear: '',
+                gender: '',
+                avatar: '👦',
+                points: 0,
+                xp: 0,
+                world: 'Cloud Kingdom',
+                tasks: [],
+                completedTasks: [],
+                taskKey: null
+            };
+            
+            // World configurations
+            const worlds = [
+                { name: 'Cloud Kingdom', xpRequired: 0, background: 'https://i.ibb.co/gM7k8MZp/Image-fx.jpg' },
+                { name: 'Mystic Island', xpRequired: 500, background: 'https://i.ibb.co/CsNVkQxp/Image-fx-2.jpg' },
+                { name: 'Balloon Empire', xpRequired: 1000, background: 'https://i.ibb.co/6MFmfd7/Image-fx-3.jpg' },
+                { name: 'XP Kingdom', xpRequired: 2000, background: 'https://i.ibb.co/JwdkwvTn/Image-fx-4.jpg' },
+                { name: 'Cyber Tunnel', xpRequired: 4000, background: 'https://i.ibb.co/fYMshCq7/Image-fx-5.jpg' },
+                { name: 'Gem World', xpRequired: 5000, background: 'https://i.ibb.co/v6n6S7T7/Image-fx-6.jpg' },
+                { name: 'Party Amaze', xpRequired: 6000, background: 'https://i.ibb.co/p6JTYwzK/Image-fx-7.jpg' },
+                { name: 'Grandmaster Aura', xpRequired: 10000, background: 'https://i.ibb.co/M5sHvWJR/Image-fx-8.jpg' }
+            ];
+            
+            // Check if kid profile exists in localStorage
+            const savedProfile = localStorage.getItem('kidProfile');
+            if (savedProfile) {
+                kidProfile = JSON.parse(savedProfile);
+                updateUI();
+                loadTasks();
+                
+                // Check if welcome modal has been shown
+                const welcomeShown = localStorage.getItem('welcomeShown');
+                if (!welcomeShown) {
+                    showWelcomeModal();
+                    localStorage.setItem('welcomeShown', 'true');
+                }
+            } else {
+                // Show registration modal
+                document.getElementById('registrationModal').style.display = 'flex';
+            }
+            
+            // Carousel functionality
+            const slides = document.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                
+                slides[index].classList.add('active');
+                indicators[index].classList.add('active');
+                currentSlide = index;
+                
+                // Update button visibility
+                document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'flex';
+                document.getElementById('nextBtn').style.display = index === slides.length - 1 ? 'none' : 'flex';
+                document.getElementById('doneBtn').style.display = index === slides.length - 1 ? 'block' : 'none';
+            }
+            
+            document.getElementById('prevBtn').addEventListener('click', function() {
+                if (currentSlide > 0) {
+                    showSlide(currentSlide - 1);
+                }
+            });
+            
+            document.getElementById('nextBtn').addEventListener('click', function() {
+                if (currentSlide < slides.length - 1) {
+                    // Validate current slide before moving to next
+                    if (validateSlide(currentSlide)) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            });
+            
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', function() {
+                    if (validateSlide(currentSlide)) {
+                        showSlide(index);
+                    }
+                });
+            });
+            
+            // Gender selection
+            document.getElementById('boyOption').addEventListener('click', function() {
+                document.getElementById('boyOption').classList.add('selected');
+                document.getElementById('girlOption').classList.remove('selected');
+                kidProfile.gender = 'boy';
+                
+                // Show boy avatars
+                document.getElementById('boyAvatars').classList.remove('hidden');
+                document.getElementById('girlAvatars').classList.add('hidden');
+            });
+            
+            document.getElementById('girlOption').addEventListener('click', function() {
+                document.getElementById('girlOption').classList.add('selected');
+                document.getElementById('boyOption').classList.remove('selected');
+                kidProfile.gender = 'girl';
+                
+                // Show girl avatars
+                document.getElementById('girlAvatars').classList.remove('hidden');
+                document.getElementById('boyAvatars').classList.add('hidden');
+            });
+            
+            // Avatar selection
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    kidProfile.avatar = this.getAttribute('data-avatar');
+                });
+            });
+            
+            // Validate slide input
+            function validateSlide(index) {
+                if (index === 0) { // Name slide
+                    const nameInput = document.getElementById('nameInput').value.trim();
+                    if (!nameInput) {
+                        showMessage('Please enter your name');
+                        return false;
+                    }
+                    kidProfile.name = nameInput;
+                } else if (index === 1) { // Birth year slide
+                    const birthYearInput = document.getElementById('birthYearInput').value.trim();
+                    if (!birthYearInput) {
+                        showMessage('Please enter your birth year');
+                        return false;
+                    }
+                    kidProfile.birthYear = birthYearInput;
+                } else if (index === 2) { // Gender slide
+                    if (!kidProfile.gender) {
+                        showMessage('Please select your gender');
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            // Show message (replaces alert)
+            function showMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'modal-overlay';
+                messageDiv.innerHTML = `
+                    <div class="modal">
+                        <div class="modal-title">Message</div>
+                        <p>${message}</p>
+                        <button class="btn-primary" onclick="this.parentElement.parentElement.remove()">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(messageDiv);
+            }
+            
+            // Done button
+            document.getElementById('doneBtn').addEventListener('click', function() {
+                if (validateSlide(3)) { // Avatar slide
+                    // Save profile to localStorage
+                    localStorage.setItem('kidProfile', JSON.stringify(kidProfile));
+                    
+                    // Close registration modal
+                    document.getElementById('registrationModal').style.display = 'none';
+                    
+                    // Show KidQ card modal
+                    showKidQCardModal();
+                }
+            });
+            
+            // Show KidQ Card modal
+            function showKidQCardModal() {
+                document.getElementById('kidQCardModal').style.display = 'flex';
+                
+                // Generate QR code for KidQ card
+                const qrContainer = document.getElementById('kidQQRCode');
+                qrContainer.innerHTML = '';
+                
+                const kidQData = {
+                    name: kidProfile.name,
+                    birthYear: kidProfile.birthYear,
+                    gender: kidProfile.gender,
+                    avatar: kidProfile.avatar,
+                    timestamp: Date.now()
+                };
+                
+                new QRCode(qrContainer, {
+                    text: JSON.stringify(kidQData),
+                    width: 200,
+                    height: 200,
+                    colorDark: '#00ff88',
+                    colorLight: '#000000',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+            
+            // Close KidQ Card modal
+            document.getElementById('closeKidQCardBtn').addEventListener('click', function() {
+                document.getElementById('kidQCardModal').style.display = 'none';
+                
+                // Show welcome modal
+                showWelcomeModal();
+            });
+            
+            // Download KidQ Card
+            document.getElementById('downloadKidQBtn').addEventListener('click', function() {
+                // In a real app, this would download the QR code
+                showMessage('KidQ Card downloaded successfully!');
+            });
+            
+            // Show welcome modal
+            function showWelcomeModal() {
+                document.getElementById('welcomeText').textContent = `Welcome, ${kidProfile.name}! Get ready for an amazing adventure!`;
+                document.getElementById('welcomeModal').style.display = 'flex';
+                localStorage.setItem('welcomeShown', 'true');
+            }
+            
+            // Continue from welcome modal
+            document.getElementById('continueBtn').addEventListener('click', function() {
+                document.getElementById('welcomeModal').style.display = 'none';
+                updateUI();
+            });
+            
+            // Update UI with profile data
+            function updateUI() {
+                document.getElementById('profileAvatar').textContent = kidProfile.avatar;
+                document.getElementById('profileName').textContent = kidProfile.name;
+                document.getElementById('worldName').textContent = kidProfile.world;
+                document.getElementById('pointsValue').textContent = kidProfile.points;
+                
+                // Update XP bar
+                const currentWorld = worlds.find(world => world.xpRequired <= kidProfile.xp && 
+                    (worlds.indexOf(world) === worlds.length - 1 || worlds[worlds.indexOf(world) + 1].xpRequired > kidProfile.xp));
+                
+                if (currentWorld) {
+                    kidProfile.world = currentWorld.name;
+                    
+                    // Update background
+                    document.getElementById('backgroundContainer').style.backgroundImage = `url('${currentWorld.background}')`;
+                    
+                    // Calculate XP to next level
+                    const nextWorldIndex = worlds.indexOf(currentWorld) + 1;
+                    const nextWorld = nextWorldIndex < worlds.length ? worlds[nextWorldIndex] : null;
+                    
+                    if (nextWorld) {
+                        const xpForCurrent = currentWorld.xpRequired;
+                        const xpForNext = nextWorld.xpRequired;
+                        const xpProgress = kidProfile.xp - xpForCurrent;
+                        const xpNeeded = xpForNext - xpForCurrent;
+                        
+                        document.getElementById('xpText').textContent = `${xpProgress} / ${xpNeeded} XP`;
+                        document.getElementById('xpBar').style.width = `${(xpProgress / xpNeeded) * 100}%`;
+                    } else {
+                        document.getElementById('xpText').textContent = `${kidProfile.xp} XP (MAX LEVEL)`;
+                        document.getElementById('xpBar').style.width = '100%';
+                    }
+                }
+                
+                // Save updated profile
+                localStorage.setItem('kidProfile', JSON.stringify(kidProfile));
+            }
+            
+            // Tab switching
+            document.getElementById('tasksTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'block';
+                document.getElementById('rewardsContent').style.display = 'none';
+                document.getElementById('statusContent').style.display = 'none';
+            });
+            
+            document.getElementById('rewardsTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'none';
+                document.getElementById('rewardsContent').style.display = 'block';
+                document.getElementById('statusContent').style.display = 'none';
+            });
+            
+            document.getElementById('statusTab').addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('tasksContent').style.display = 'none';
+                document.getElementById('rewardsContent').style.display = 'none';
+                document.getElementById('statusContent').style.display = 'block';
+            });
+            
+            // Get tasks button
+            document.getElementById('getTasksBtn').addEventListener('click', function() {
+                document.getElementById('qrScannerModal').style.display = 'flex';
+            });
+            
+            // Close QR scanner modal
+            document.getElementById('closeQrScannerBtn').addEventListener('click', function() {
+                document.getElementById('qrScannerModal').style.display = 'none';
+            });
+            
+            // Simulate scan tasks button
+            document.getElementById('scanTasksBtn').addEventListener('click', function() {
+                // Simulate receiving tasks from parent
+                const mockTasks = [
+                    {
+                        id: Date.now() + 1,
+                        name: 'Clean your room',
+                        description: 'Make your bed and organize your toys',
+                        points: 10,
+                        timestamp: Date.now()
+                    },
+                    {
+                        id: Date.now() + 2,
+                        name: 'Do your homework',
+                        description: 'Complete all homework assignments',
+                        points: 15,
+                        timestamp: Date.now()
+                    },
+                    {
+                        id: Date.now() + 3,
+                        name: 'Help with dishes',
+                        description: 'Help wash the dishes after dinner',
+                        points: 5,
+                        timestamp: Date.now()
+                    }
+                ];
+                
+                // Generate a random task key
+                const taskKey = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+                kidProfile.taskKey = taskKey;
+                
+                // Add tasks to profile
+                kidProfile.tasks = mockTasks;
+                localStorage.setItem('kidProfile', JSON.stringify(kidProfile));
+                
+                // Close modal and load tasks
+                document.getElementById('qrScannerModal').style.display = 'none';
+                loadTasks();
+            });
+            
+            // Load tasks
+            function loadTasks() {
+                const tasks = kidProfile.tasks;
+                
+                if (tasks.length === 0) {
+                    document.getElementById('noTasksContainer').classList.remove('hidden');
+                    document.getElementById('tasksList').classList.add('hidden');
+                    document.getElementById('progressContainer').classList.add('hidden');
+                    document.getElementById('confirmTasksBtn').classList.add('hidden');
+                } else {
+                    document.getElementById('noTasksContainer').classList.add('hidden');
+                    document.getElementById('tasksList').classList.remove('hidden');
+                    document.getElementById('progressContainer').classList.remove('hidden');
+                    
+                    // Render tasks
+                    const tasksList = document.getElementById('tasksList');
+                    tasksList.innerHTML = '';
+                    
+                    tasks.forEach(task => {
+                        const taskElement = document.createElement('div');
+                        taskElement.className = 'task-item';
+                        taskElement.dataset.taskId = task.id;
+                        
+                        const isCompleted = kidProfile.completedTasks.some(ct => ct.id === task.id);
+                        
+                        taskElement.innerHTML = `
+                            <div class="task-header">
+                                <div class="task-title">${task.name}</div>
+                                <div class="task-points">
+                                    <i class="fas fa-coins"></i>
+                                    ${task.points}
+                                </div>
+                            </div>
+                            <div class="task-description">${task.description}</div>
+                            <div class="task-footer">
+                                <div class="task-time">Received: ${formatTime(task.timestamp)}</div>
+                                <button class="task-complete-btn ${isCompleted ? 'completed' : ''}" data-task-id="${task.id}">
+                                    ${isCompleted ? 'Completed' : 'Complete'}
+                                </button>
+                            </div>
+                        `;
+                        
+                        tasksList.appendChild(taskElement);
+                    });
+                    
+                    // Add event listeners to complete buttons
+                    document.querySelectorAll('.task-complete-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const taskId = parseInt(this.getAttribute('data-task-id'));
+                            toggleTaskComplete(taskId);
+                        });
+                    });
+                    
+                    // Update progress
+                    updateProgress();
+                }
+            }
+            
+            // Format time
+            function formatTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diff = now - date;
+                
+                if (diff < 60000) { // Less than 1 minute
+                    return 'Just now';
+                } else if (diff < 3600000) { // Less than 1 hour
+                    return `${Math.floor(diff / 60000)} minutes ago`;
+                } else if (diff < 86400000) { // Less than 1 day
+                    return `${Math.floor(diff / 3600000)} hours ago`;
+                } else {
+                    return `${Math.floor(diff / 86400000)} days ago`;
+                }
+            }
+            
+            // Toggle task complete
+            function toggleTaskComplete(taskId) {
+                const task = kidProfile.tasks.find(t => t.id === taskId);
+                if (!task) return;
+                
+                const completedIndex = kidProfile.completedTasks.findIndex(ct => ct.id === taskId);
+                
+                if (completedIndex === -1) {
+                    // Add to completed tasks
+                    kidProfile.completedTasks.push(task);
+                    
+                    // Add animation
+                    const taskElement = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+                    taskElement.classList.add('task-complete-animation');
+                    
+                    // Add emoji animation to button
+                    const btn = document.querySelector(`.task-complete-btn[data-task-id="${taskId}"]`);
+                    btn.innerHTML = '<span class="emoji-animation">✅</span> Completed';
+                    btn.classList.add('completed');
+                } else {
+                    // Remove from completed tasks
+                    kidProfile.completedTasks.splice(completedIndex, 1);
+                    
+                    // Remove animation
+                    const taskElement = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+                    taskElement.classList.remove('task-complete-animation');
+                    
+                    // Remove emoji animation from button
+                    const btn = document.querySelector(`.task-complete-btn[data-task-id="${taskId}"]`);
+                    btn.innerHTML = 'Complete';
+                    btn.classList.remove('completed');
+                }
+                
+                // Save profile
+                localStorage.setItem('kidProfile', JSON.stringify(kidProfile));
+                
+                // Update progress
+                updateProgress();
+            }
+            
+            // Update progress
+            function updateProgress() {
+                const totalTasks = kidProfile.tasks.length;
+                const completedTasks = kidProfile.completedTasks.length;
+                const percentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                
+                document.getElementById('progressValue').textContent = `${completedTasks} / ${totalTasks}`;
+                document.getElementById('progressFill').style.width = `${percentage}%`;
+                
+                // Update progress message
+                const messages = [
+                    "Keep going! You're doing great!",
+                    "You're on a roll! Keep it up!",
+                    "Amazing work! You're almost there!",
+                    "Fantastic! You're a task master!"
+                ];
+                
+                const messageIndex = Math.min(Math.floor(percentage / 25), messages.length - 1);
+                document.getElementById('progressMessage').textContent = messages[messageIndex];
+                
+                // Show/hide confirm button
+                if (completedTasks > 0 && completedTasks === totalTasks) {
+                    document.getElementById('confirmTasksBtn').classList.remove('hidden');
+                    
+                    // Blur tasks list
+                    document.getElementById('tasksList').style.filter = 'blur(5px)';
+                } else {
+                    document.getElementById('confirmTasksBtn').classList.add('hidden');
+                    
+                    // Unblur tasks list
+                    document.getElementById('tasksList').style.filter = 'none';
+                }
+            }
+            
+            // Confirm tasks button
+            document.getElementById('confirmTasksBtn').addEventListener('click', function() {
+                document.getElementById('confirmTasksQRModal').style.display = 'flex';
+                
+                // Generate QR code for completed tasks
+                const qrContainer = document.getElementById('confirmTasksQRCode');
+                qrContainer.innerHTML = '';
+                
+                const completedTasksData = {
+                    key: kidProfile.taskKey,
+                    tasks: kidProfile.completedTasks,
+                    kidName: kidProfile.name,
+                    timestamp: Date.now()
+                };
+                
+                new QRCode(qrContainer, {
+                    text: JSON.stringify(completedTasksData),
+                    width: 200,
+                    height: 200,
+                    colorDark: '#00ff88',
+                    colorLight: '#000000',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            });
+            
+            // Close confirm tasks QR modal
+            document.getElementById('closeConfirmTasksQRBtn').addEventListener('click', function() {
+                document.getElementById('confirmTasksQRModal').style.display = 'none';
+            });
+            
+            // Download confirm QR button
+            document.getElementById('downloadConfirmQRBtn').addEventListener('click', function() {
+                // In a real app, this would download the QR code
+                showMessage('QR Code downloaded successfully!');
+            });
+            
+            // Simulate receiving confirmation from parent
+            function simulateParentConfirmation() {
+                // In a real app, this would be handled by WebSocket
+                // For now, we'll simulate it with a timeout
+                
+                setTimeout(() => {
+                    // Calculate points earned
+                    const pointsEarned = kidProfile.completedTasks.reduce((total, task) => total + task.points, 0);
+                    
+                    // Add points to profile
+                    kidProfile.points += pointsEarned;
+                    
+                    // Add XP
+                    const xpGained = Math.floor(Math.random() * 31) + 20; // Random between 20-50
+                    const oldXp = kidProfile.xp;
+                    kidProfile.xp += xpGained;
+                    
+                    // Check for level up
+                    const oldWorld = worlds.find(world => world.xpRequired <= oldXp && 
+                        (worlds.indexOf(world) === worlds.length - 1 || worlds[worlds.indexOf(world) + 1].xpRequired > oldXp));
+                    
+                    const newWorld = worlds.find(world => world.xpRequired <= kidProfile.xp && 
+                        (worlds.indexOf(world) === worlds.length - 1 || worlds[worlds.indexOf(world) + 1].xpRequired > kidProfile.xp));
+                    
+                    // Clear tasks
+                    kidProfile.tasks = [];
+                    kidProfile.completedTasks = [];
+                    
+                    // Save profile
+                    localStorage.setItem('kidProfile', JSON.stringify(kidProfile));
+                    
+                    // Update UI
+                    updateUI();
+                    loadTasks();
+                    
+                    // Show level up modal if leveled up
+                    if (oldWorld && newWorld && oldWorld.name !== newWorld.name) {
+                        showLevelUpModal(oldWorld, newWorld, pointsEarned);
+                    } else {
+                        // Show confirmation message
+                        showMessage(`Great job! You earned ${pointsEarned} points and ${xpGained} XP!`);
+                    }
+                }, 3000);
+            }
+            
+            // Show level up modal
+            function showLevelUpModal(oldWorld, newWorld, pointsEarned) {
+                // Calculate bonus points based on new level
+                const bonusPoints = Math.floor(Math.random() * 901) + 100; // Random between 100-1000
+                
+                // Add bonus points
+                kidProfile.points += bonusPoints;
+                
+                // Save profile
+                localStorage.setItem('kidProfile', JSON.stringify(kidProfile));
+                
+                // Update modal content
+                document.getElementById('levelUpMessage').textContent = `Congratulations! You've reached ${newWorld.name}!`;
+                document.getElementById('bonusPoints').textContent = `+${pointsEarned} Points +${bonusPoints} Bonus Points!`;
+                
+                // Calculate next level
+                const nextWorldIndex = worlds.indexOf(newWorld) + 1;
+                const nextWorld = nextWorldIndex < worlds.length ? worlds[nextWorldIndex] : null;
+                
+                if (nextWorld) {
+                    const xpNeeded = nextWorld.xpRequired - kidProfile.xp;
+                    document.getElementById('nextLevel').textContent = `Next: ${nextWorld.name} in ${xpNeeded} XP`;
+                } else {
+                    document.getElementById('nextLevel').textContent = 'You\'ve reached the highest level!';
+                }
+                
+                // Show modal
+                document.getElementById('levelUpModal').style.display = 'flex';
+            }
+            
+            // Continue from level up modal
+            document.getElementById('continueLevelUpBtn').addEventListener('click', function() {
+                document.getElementById('levelUpModal').style.display = 'none';
+                updateUI();
+            });
+            
+            // Simulate parent confirmation when confirm tasks QR is shown
+            document.getElementById('confirmTasksQRModal').addEventListener('click', function() {
+                simulateParentConfirmation();
+            });
+        });
+    </script>
+</body>
+</html>
