@@ -403,27 +403,31 @@
             let pinInput = '';
             let isSetupMode = true;
             
-            const isFirstVisit = localStorage.getItem('isFirstVisit');
-            const userMode = localStorage.getItem('userMode');
-            const parentPin = localStorage.getItem('parentPin');
-            
-            if (!isFirstVisit) {
-                localStorage.setItem('isFirstVisit', 'true');
-                setTimeout(() => {
-                    document.getElementById('loader').classList.add('hidden');
-                }, 10000);
-            } else {
-                document.getElementById('loader').classList.add('hidden');
+            // Setup all event listeners first
+            function setupEventListeners() {
+                document.querySelectorAll('.pin-key:not(.backspace)').forEach(key => {
+                    key.addEventListener('click', function() {
+                        handlePinInput(this.getAttribute('data-value'));
+                    });
+                });
                 
-                if (userMode === 'child') {
-                    window.location.href = 'kid.html';
-                    return;
-                } else if (userMode === 'parent' && parentPin) {
-                    setTimeout(() => {
+                document.getElementById('backspace').addEventListener('click', handleBackspace);
+                document.getElementById('closePinModal').addEventListener('click', hidePinModal);
+                
+                document.getElementById('parentBtn').addEventListener('click', function() {
+                    const parentPin = localStorage.getItem('parentPin');
+                    
+                    if (parentPin) {
                         showPinModal(false);
-                    }, 100);
-                    return;
-                }
+                    } else {
+                        showPinModal(true);
+                    }
+                });
+                
+                document.getElementById('childBtn').addEventListener('click', function() {
+                    localStorage.setItem('userMode', 'child');
+                    window.location.href = 'kid.html';
+                });
             }
             
             function showPinModal(isSetup) {
@@ -495,29 +499,32 @@
                 }
             }
             
-            document.querySelectorAll('.pin-key:not(.backspace)').forEach(key => {
-                key.addEventListener('click', function() {
-                    handlePinInput(this.getAttribute('data-value'));
-                });
-            });
+            // Setup event listeners before checking localStorage
+            setupEventListeners();
             
-            document.getElementById('backspace').addEventListener('click', handleBackspace);
-            document.getElementById('closePinModal').addEventListener('click', hidePinModal);
+            // Now check localStorage
+            const isFirstVisit = localStorage.getItem('isFirstVisit');
+            const userMode = localStorage.getItem('userMode');
+            const parentPin = localStorage.getItem('parentPin');
             
-            document.getElementById('parentBtn').addEventListener('click', function() {
-                const parentPin = localStorage.getItem('parentPin');
+            if (!isFirstVisit) {
+                localStorage.setItem('isFirstVisit', 'true');
+                setTimeout(() => {
+                    document.getElementById('loader').classList.add('hidden');
+                }, 10000);
+            } else {
+                document.getElementById('loader').classList.add('hidden');
                 
-                if (parentPin) {
-                    showPinModal(false);
-                } else {
-                    showPinModal(true);
+                if (userMode === 'child') {
+                    window.location.href = 'kid.html';
+                    return;
+                } else if (userMode === 'parent' && parentPin) {
+                    setTimeout(() => {
+                        showPinModal(false);
+                    }, 100);
+                    return;
                 }
-            });
-            
-            document.getElementById('childBtn').addEventListener('click', function() {
-                localStorage.setItem('userMode', 'child');
-                window.location.href = 'kid.html';
-            });
+            }
         });
     </script>
 </body>
